@@ -8,15 +8,27 @@ class FixedBackground:
 
     def __init__(self):
         self.image = load_image('futsal_court.png')
+        self.bw = self.image.w
+        self.bh = self.image.h   # 배경 이미지의 너비, 높이
+
+        self.cw = get_canvas_width()    # 캔버스의 너비
+        self.ch = get_canvas_height()   # 캔버스의 높이
         # fill here
         pass
 
     def draw(self):
         # fill here
+        self.image.clip_draw_to_origin(self.window_left, self.window_bottom,
+                                       self.cw, self.ch, 0, 0)
         pass
 
     def update(self):
         # fill here
+        self.window_left = int(server.boy.x) - self.cw // 2
+        self.window_bottom = int(server.boy.y) - self.ch // 2
+
+        self.window_left = clamp(0, self.window_left, self.bw - self.cw - 1)
+        self.window_bottom = clamp(0, self.window_bottom, self.bh - self.ch - 1)
         pass
 
     def handle_event(self, event):

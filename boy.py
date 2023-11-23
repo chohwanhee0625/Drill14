@@ -58,7 +58,7 @@ def time_out(e):
 
 # Boy Run Speed
 PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
-RUN_SPEED_KMPH = 20.0  # Km / Hour
+RUN_SPEED_KMPH = 50.0  # Km / Hour
 RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
@@ -275,11 +275,15 @@ class Boy:
         self.state_machine = StateMachine(self)
         self.state_machine.start()
         # fill here
+        self.x = server.background.bw // 2
+        self.y = server.background.bh // 2
 
 
     def update(self):
         self.state_machine.update()
         # fill here
+        self.x = clamp(50, self.x, server.background.bw - 50)
+        self.y = clamp(50, self.y, server.background.bh - 50)
 
 
     def handle_event(self, event):
@@ -287,6 +291,11 @@ class Boy:
 
     def draw(self):
         # fill here
+        #
+        sx = self.x - server.background.window_left
+        sy = self.y - server.background.window_bottom
+        self.image.clip_draw(int(self.frame) * 100, self.action * 100, 100, 100, sx, sy)
+        draw_rectangle(sx - 20, sy - 50, sx + 20, sy + 50)
         pass
 
     def get_bb(self):
